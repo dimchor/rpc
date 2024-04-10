@@ -1,0 +1,35 @@
+#include <math.h>
+#include "../src/vector/vector.h"
+#define EPSILON .001
+
+#test vector_mean
+    int const vector[] = {8, 65, 96, 46, 61, 22, 40, 3, 13, 56, 81, 85, 30, 95, 62, 42};
+    
+    size_t const size = sizeof(vector) / sizeof(int);
+    VECTOR_error_t err;
+
+    fail_unless(fabs(VECTOR_mean(vector, size, &err) - 50.313) < EPSILON, "incorrect result");
+
+#test vector_min_max
+    int const vector[] = {8, 65, 96, 46, 61, 22, 40, 3, 13, 56, 81, 85, 30, 95, 62, 42};
+    
+    size_t const size = sizeof(vector) / sizeof(int);
+    VECTOR_error_t err;
+
+    VECTOR_int_pair_t const result = VECTOR_min_max(vector, size, &err);
+
+    fail_unless(result.first == 3 && result.second == 96, "incorrect result");
+    
+#test vector_scalar_multiplication
+    int const vector[] = {8, 65, 96, 46};
+    size_t const size = sizeof(vector) / sizeof(int);
+    double const d = 1.5;
+    VECTOR_error_t err;
+
+    double const* result = VECTOR_scalar_multiplication(vector, size, d, &err);
+
+    fail_unless(fabs(result[0] - 12) < EPSILON, "incorrect result");
+    fail_unless(fabs(result[1] - 97.5) < EPSILON, "incorrect result");
+    fail_unless(fabs(result[2] - 144) < EPSILON, "incorrect result");
+    fail_unless(fabs(result[3] - 69) < EPSILON, "incorrect result");
+    
