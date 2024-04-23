@@ -3,7 +3,7 @@ VECTOR_SRC_DIR=./src/vector/
 TEST_SRC_DIR=./tests/
 BIN_DIR=./bin/
 OBJ_DIR=./obj/
-LIBS=-pthread -lcheck_pic -pthread -lrt -lm -lsubunit
+LIBS=-pthread -lcheck -pthread -lrt -lm -lsubunit
 
 $(shell mkdir -p $(BIN_DIR) $(OBJ_DIR))
 
