@@ -1,3 +1,6 @@
+%#include "../vector/vector.h"
+%#include "../vector/error.h"
+
 struct input_vector {
     int y<>;
 };
@@ -25,7 +28,7 @@ struct output_scalar_multiplication {
 program CALC_PROG {
     version CALC_VERS {
         output_mean MEAN(input_vector) = 1;
-        output_min_max MIN_MAX(input_vector) = 1;
-        output_scalar_multiplication SCALAR_MULTIPLICATION(input_scalar_multiplication) = 1;
+        output_min_max MIN_MAX(input_vector) = 2;
+        output_scalar_multiplication SCALAR_MULTIPLICATION(input_scalar_multiplication) = 3;
     } = 1;
 } = 0x23451111;

@@ -80,3 +80,19 @@ double* VECTOR_scalar_multiplication(int const* vector, size_t size, double d, V
 
     return d_vector;
 }
+
+bool_t xdr_VECTOR_error_t(XDR* xdrs, VECTOR_error_t* e)
+{
+    if (!xdr_int(xdrs, (int*) e))
+        return FALSE;
+    return TRUE;
+}
+
+bool_t xdr_VECTOR_int_pair_t(XDR* xdrs, VECTOR_int_pair_t* p)
+{
+    if (!xdr_int(xdrs, &p->first))
+        return FALSE;
+    if (!xdr_int(xdrs, &p->second))
+        return FALSE;
+    return TRUE;
+}

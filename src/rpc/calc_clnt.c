@@ -5,6 +5,8 @@
 
 #include <memory.h> /* for memset */
 #include "calc.h"
+#include "../vector/vector.h"
+#include "../vector/error.h"
 
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };

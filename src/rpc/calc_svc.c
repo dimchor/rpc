@@ -15,6 +15,8 @@
 #ifndef SIG_PF
 #define SIG_PF void(*)(int)
 #endif
+#include "../vector/vector.h"
+#include "../vector/error.h"
 
 static void
 calc_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)

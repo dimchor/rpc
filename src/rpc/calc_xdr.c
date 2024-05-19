@@ -4,6 +4,8 @@
  */
 
 #include "calc.h"
+#include "../vector/vector.h"
+#include "../vector/error.h"
 
 bool_t
 xdr_input_vector (XDR *xdrs, input_vector *objp)

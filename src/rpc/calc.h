@@ -8,12 +8,13 @@
 
 #include <rpc/rpc.h>
 
-#include "../vector/vector.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include "../vector/vector.h"
+#include "../vector/error.h"
 
 struct input_vector {
 	struct {
@@ -60,10 +61,10 @@ typedef struct output_scalar_multiplication output_scalar_multiplication;
 #define MEAN 1
 extern  output_mean * mean_1(input_vector *, CLIENT *);
 extern  output_mean * mean_1_svc(input_vector *, struct svc_req *);
-#define MIN_MAX 1
+#define MIN_MAX 2
 extern  output_min_max * min_max_1(input_vector *, CLIENT *);
 extern  output_min_max * min_max_1_svc(input_vector *, struct svc_req *);
-#define SCALAR_MULTIPLICATION 1
+#define SCALAR_MULTIPLICATION 3
 extern  output_scalar_multiplication * scalar_multiplication_1(input_scalar_multiplication *, CLIENT *);
 extern  output_scalar_multiplication * scalar_multiplication_1_svc(input_scalar_multiplication *, struct svc_req *);
 extern int calc_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
@@ -72,10 +73,10 @@ extern int calc_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 #define MEAN 1
 extern  output_mean * mean_1();
 extern  output_mean * mean_1_svc();
-#define MIN_MAX 1
+#define MIN_MAX 2
 extern  output_min_max * min_max_1();
 extern  output_min_max * min_max_1_svc();
-#define SCALAR_MULTIPLICATION 1
+#define SCALAR_MULTIPLICATION 3
 extern  output_scalar_multiplication * scalar_multiplication_1();
 extern  output_scalar_multiplication * scalar_multiplication_1_svc();
 extern int calc_prog_1_freeresult ();
