@@ -4,7 +4,10 @@ RPC_DIR=./src/rpc/
 TEST_SRC_DIR=./tests/
 LIBS=-pthread -lcheck -pthread -lrt -lm -lsubunit -ltirpc
 
-all: test_vector rpc
+all: test_vector rpc socket_client
+
+socket_client: rpc $(RPC_DIR)socket_client.c
+	gcc $(CFLAGS) $(RPC_DIR)socket_client.c -o $(RPC_DIR)cli
 
 rpc: vector.o
 	(cd $(RPC_DIR) && make -f Makefile.calc)
