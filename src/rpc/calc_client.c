@@ -58,6 +58,84 @@ calc_prog_1(char *host)
 #endif	 /* DEBUG */
 }
 
+void mean(int fd)
+{
+	output_mean  *result_1;
+	input_vector  mean_1_arg;
+
+	if (recv(fd, &mean_1_arg.y.y_len, sizeof(unsigned), 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+
+	if (!(mean_1_arg.y.y_val = malloc(sizeof(int) * 
+										mean_1_arg.y.y_len)))
+	{
+		puts("unable to allocate memory");
+		return;
+	}
+
+	if (recv(fd, mean_1_arg.y.y_val, 
+			sizeof(int) * mean_1_arg.y.y_len, 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+
+	result_1 = mean_1(&mean_1_arg, clnt);
+	if (result_1 == (output_mean*) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+
+	free(mean_1_arg.y.y_val);
+
+	if (send(fd, result_1, sizeof(output_mean), 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+}
+
+void min_max(int fd)
+{
+	output_min_max  *result_2;
+	input_vector  min_max_1_arg;
+
+	if (recv(fd, &min_max_1_arg.y.y_len, sizeof(unsigned), 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+
+	if (!(min_max_1_arg.y.y_val = malloc(sizeof(int) * 
+										min_max_1_arg.y.y_len)))
+	{
+		puts("unable to allocate memory");
+		return;
+	}
+
+	if (recv(fd, min_max_1_arg.y.y_val, 
+			sizeof(int) * min_max_1_arg.y.y_len, 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+
+	result_2 = min_max_1(&min_max_1_arg, clnt);
+	if (result_2 == (output_min_max *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+
+	free(min_max_1_arg.y.y_val);
+
+	if (send(fd, result_2, sizeof(output_min_max), 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+}
+
 void* option(void* arg)
 {
 	int const fd = (intptr_t) arg;
@@ -74,48 +152,11 @@ void* option(void* arg)
 		switch (opt)
 		{
 		case MEAN:
-			{
-				output_mean  *result_1;
-				input_vector  mean_1_arg;
-
-				if (recv(fd, &mean_1_arg.y.y_len, sizeof(unsigned), 0) < 0)
-				{
-					puts("unable to send data");
-					return NULL;
-				}
-
-				if (!(mean_1_arg.y.y_val = malloc(sizeof(int) * 
-												  mean_1_arg.y.y_len)))
-				{
-					puts("unable to allocate memory");
-					return NULL;
-				}
-
-				if (recv(fd, mean_1_arg.y.y_val, 
-						sizeof(int) * mean_1_arg.y.y_len, 0) < 0)
-				{
-					puts("unable to send data");
-					return NULL;
-				}
-
-				result_1 = mean_1(&mean_1_arg, clnt);
-				if (result_1 == (output_mean*) NULL) {
-					clnt_perror (clnt, "call failed");
-				}
-
-				free(mean_1_arg.y.y_val);
-
-				if (send(fd, result_1, sizeof(output_mean), 0) < 0)
-				{
-					puts("unable to send data");
-					return NULL;
-				}
-			}
+			mean(fd);
 			break;
 		case MIN_MAX:
-
+			min_max(fd);
 			break;
-
 		case SCALAR_MULTIPLICATION:
 
 			break;

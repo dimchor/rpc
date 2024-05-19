@@ -64,6 +64,35 @@ void mean(int fd)
     printf("arithmetic mean value: %lf\n", o.mean);
 }
 
+void min_max(int fd)
+{
+    unsigned long size;
+    printf("Enter vector size: ");
+    scanf("%lu", &size);
+    puts("Enter vector values:");
+    int* vector;
+    assert((vector = scan_vector(size)) && "unable to allocate enough memory");
+
+    assert(send(fd, (unsigned*) &size, sizeof(unsigned), 0) >= 0 && 
+        "unable to send data");
+    assert(send(fd, vector, sizeof(int) * size, 0) >= 0 && 
+        "unable to send data");
+
+    free(vector);
+
+    output_min_max o;
+    assert(recv(fd, &o, sizeof(output_min_max), 0) >= 0 && 
+        "unable to recover data");
+    
+    if (o.err != NO_ERROR)
+    {
+        printf("unable to find arithmetic mean value\nerr code %u\n", o.err);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("min value: %d, max value: %d\n", o.pair.first, o.pair.second);
+}
+
 int main(int argc, char const** argv)
 {
     assert(argc == 3 && "usage: cli <hostname> <post>");
@@ -100,7 +129,7 @@ int main(int argc, char const** argv)
             mean(fd);
             break;
         case MIN_MAX:
-
+            min_max(fd);
             break;
         case SCALAR_MULTIPLICATION:
 
