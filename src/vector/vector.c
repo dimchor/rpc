@@ -17,6 +17,8 @@ double VECTOR_mean(int const* vector, size_t size, VECTOR_error_t* err)
     int sum = 0;
     for (size_t i = 0; i < size; ++i)
         sum += vector[i];
+
+    *err = NO_ERROR;
     return (double) sum / size;
 }
 
@@ -51,6 +53,7 @@ VECTOR_int_pair_t VECTOR_min_max(int const* vector, size_t size, VECTOR_error_t*
             r.second = vector[i];
     }
 
+    *err = NO_ERROR;
     return r;
 }
 
@@ -78,6 +81,7 @@ double* VECTOR_scalar_multiplication(int const* vector, size_t size, double d, V
     for (size_t i = 0; i < size; ++i)
         d_vector[i] = d * vector[i];
 
+    *err = NO_ERROR;
     return d_vector;
 }
 
