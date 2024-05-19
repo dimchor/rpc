@@ -58,7 +58,7 @@ void mean(int fd)
     if (o.err != NO_ERROR)
     {
         printf("unable to find arithmetic mean value\nerr code %u\n", o.err);
-        exit(EXIT_FAILURE);
+        return;
     }
 
     printf("arithmetic mean value: %lf\n", o.mean);
@@ -86,11 +86,60 @@ void min_max(int fd)
     
     if (o.err != NO_ERROR)
     {
-        printf("unable to find arithmetic mean value\nerr code %u\n", o.err);
-        exit(EXIT_FAILURE);
+        printf("unable to find min and max values\nerr code %u\n", o.err);
+        return;
     }
 
     printf("min value: %d, max value: %d\n", o.pair.first, o.pair.second);
+}
+
+void scalar_multiplication(int fd)
+{
+    unsigned long size;
+    printf("Enter vector size: ");
+    scanf("%lu", &size);
+    puts("Enter vector values:");
+    int* vector;
+    assert((vector = scan_vector(size)) && "unable to allocate enough memory");
+
+    assert(send(fd, (unsigned*) &size, sizeof(unsigned), 0) >= 0 && 
+        "unable to send data");
+    assert(send(fd, vector, sizeof(int) * size, 0) >= 0 && 
+        "unable to send data");
+
+    free(vector);
+
+    double d;
+    printf("Enter double: ");
+    scanf("%lf", &d);
+    assert(send(fd, &d, sizeof(double), 0) >= 0 && "unable to send data");
+
+    output_scalar_multiplication o;
+    assert(recv(fd, &o, sizeof(output_scalar_multiplication), 0) >= 0 && 
+        "unable to recover data");
+
+    if (o.err != NO_ERROR)
+    {
+        printf("unable to find scalar multiplication\nerr code %u\n", o.err);
+        return;
+    }
+
+    o.y.y_val = NULL;
+
+    assert((o.y.y_val = malloc(sizeof(double) * o.y.y_len)) && 
+        "unable to allocate memory");
+
+    assert(recv(fd, o.y.y_val, sizeof(double) * o.y.y_len, 0) >= 0 &&
+        "unable to recover data");
+    
+    puts("new vector:");
+    for (unsigned long i = 0; i < o.y.y_len; ++i)
+    {
+        printf("%lf ", o.y.y_val[i]);
+    }
+    puts("");
+
+    free(o.y.y_val);
 }
 
 int main(int argc, char const** argv)
@@ -132,7 +181,7 @@ int main(int argc, char const** argv)
             min_max(fd);
             break;
         case SCALAR_MULTIPLICATION:
-
+            scalar_multiplication(fd);
             break;
         case EXIT:
             return EXIT_SUCCESS;

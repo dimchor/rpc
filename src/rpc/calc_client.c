@@ -65,7 +65,7 @@ void mean(int fd)
 
 	if (recv(fd, &mean_1_arg.y.y_len, sizeof(unsigned), 0) < 0)
 	{
-		puts("unable to send data");
+		puts("unable to recover data");
 		return;
 	}
 
@@ -79,7 +79,7 @@ void mean(int fd)
 	if (recv(fd, mean_1_arg.y.y_val, 
 			sizeof(int) * mean_1_arg.y.y_len, 0) < 0)
 	{
-		puts("unable to send data");
+		puts("unable to recover data");
 		return;
 	}
 
@@ -104,7 +104,7 @@ void min_max(int fd)
 
 	if (recv(fd, &min_max_1_arg.y.y_len, sizeof(unsigned), 0) < 0)
 	{
-		puts("unable to send data");
+		puts("unable to recover data");
 		return;
 	}
 
@@ -118,7 +118,7 @@ void min_max(int fd)
 	if (recv(fd, min_max_1_arg.y.y_val, 
 			sizeof(int) * min_max_1_arg.y.y_len, 0) < 0)
 	{
-		puts("unable to send data");
+		puts("unable to recover data");
 		return;
 	}
 
@@ -130,6 +130,60 @@ void min_max(int fd)
 	free(min_max_1_arg.y.y_val);
 
 	if (send(fd, result_2, sizeof(output_min_max), 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+}
+
+void scalar_multiplication(int fd)
+{
+	output_scalar_multiplication  *result_3;
+	input_scalar_multiplication  scalar_multiplication_1_arg;
+
+	if (recv(fd, &scalar_multiplication_1_arg.y.y_len, sizeof(unsigned), 0) < 0)
+	{
+		puts("unable to recover data");
+		return;
+	}
+
+	if (!(scalar_multiplication_1_arg.y.y_val = malloc(sizeof(int) * 
+										scalar_multiplication_1_arg.y.y_len)))
+	{
+		puts("unable to allocate memory");
+		return;
+	}
+
+	if (recv(fd, scalar_multiplication_1_arg.y.y_val, 
+			sizeof(int) * scalar_multiplication_1_arg.y.y_len, 0) < 0)
+	{
+		puts("unable to recover data");
+		return;
+	}
+
+	if (recv(fd, &scalar_multiplication_1_arg.a, sizeof(double), 0) < 0)
+	{
+		puts("unable to recover data");
+		return;
+	}
+
+	result_3 = scalar_multiplication_1(&scalar_multiplication_1_arg, clnt);
+	if (result_3 == (output_scalar_multiplication *) NULL) {
+		clnt_perror (clnt, "call failed");
+	}
+
+	free(scalar_multiplication_1_arg.y.y_val);
+
+	if (send(fd, result_3, sizeof(output_scalar_multiplication), 0) < 0)
+	{
+		puts("unable to send data");
+		return;
+	}
+
+	if (result_3->err != NO_ERROR)
+		return;
+
+	if (send(fd, result_3->y.y_val, sizeof(double) * result_3->y.y_len, 0) < 0)
 	{
 		puts("unable to send data");
 		return;
@@ -158,7 +212,7 @@ void* option(void* arg)
 			min_max(fd);
 			break;
 		case SCALAR_MULTIPLICATION:
-
+			scalar_multiplication(fd);
 			break;
 		case EXIT:
 			close(fd);
